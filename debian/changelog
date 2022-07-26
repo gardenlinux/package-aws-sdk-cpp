@@ -1,0 +1,5 @@
+aws-sdk-cpp (1.9.303-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Garden Linux builder <contact@gardenlinux.io>  Wed, 20 Jul 2022 12:21:30 +0000

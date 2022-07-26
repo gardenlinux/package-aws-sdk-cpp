@@ -1,0 +1,61 @@
+variables:
+  DEBFULLNAME: "Garden Linux builder"
+  DEBEMAIL: "contact@gardenlinux.io"
+  SOURCE_NAME: $CI_PROJECT_NAME
+  SOURCE_DIST: bookworm
+
+source:
+  stage: source
+  image: debian:bookworm-slim
+
+  variables:
+    SOURCES_LIST: |
+      deb http://deb.debian.org/debian bookworm main
+      deb http://deb.debian.org/debian-security bookworm-security main
+      deb-src http://deb.debian.org/debian bullseye main
+      deb-src http://deb.debian.org/debian-security bullseye-security main
+      deb-src http://deb.debian.org/debian bookworm main
+      deb-src http://deb.debian.org/debian-security bookworm-security main
+      deb-src http://deb.debian.org/debian sid main
+      deb-src http://deb.debian.org/debian experimental main
+
+  before_script:
+  - >
+    if [[ $CI_DISPOSABLE_ENVIRONMENT ]]; then
+      echo -n "$SOURCES_LIST" > /etc/apt/sources.list
+      apt-get update -qy
+      apt-get install -qy --no-install-recommends git build-essential devscripts curl
+    fi
+  - >
+    if [[ $CI_COMMIT_TAG ]]; then
+      SOURCE_VERSION=${CI_COMMIT_TAG#*/}
+      APT_NAME=${SOURCE_NAME}=${SOURCE_VERSION%garden*}
+    else
+      APT_NAME=${SOURCE_NAME}/${SOURCE_DIST}
+    fi
+
+  script:
+  - cat /proc/meminfo
+  - ROOT=$(pwd)
+  - mkdir _output
+  - cd _output
+  - REPO="https://github.com/aws/aws-sdk-cpp.git"
+  - VERSION=1.9.303
+  - git clone --depth=1 --recurse-submodules -b "$VERSION" "$REPO"
+  - cd aws-sdk-cpp
+  - curl -sSL https://patch-diff.githubusercontent.com/raw/aws/aws-sdk-cpp/pull/1986.patch | git apply
+  - git config core.quotepath off
+  - git ls-files --recurse-submodules | tar cJf "../aws-sdk-cpp_$VERSION.orig.tar.xz" --transform 's#^#'"aws-sdk-cpp-$VERSION"'/#S' --verbatim-files-from -T-
+  - cd ..
+  - rm -rf aws-sdk-cpp
+  - tar xJf "aws-sdk-cpp_$VERSION.orig.tar.xz"
+  - cp -r "$ROOT/debian" "aws-sdk-cpp-$VERSION/"
+  - cd "aws-sdk-cpp-$VERSION/"
+  - dpkg-buildpackage -us -uc -S -nc -d
+
+  artifacts:
+    paths:
+    - _output/*.changes
+    - _output/*.dsc
+    - _output/*.tar.*
+    expire_in: 1 week

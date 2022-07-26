@@ -1,0 +1,22 @@
+stages:
+- source
+- build
+- signed source
+- signed build
+- test
+- deploy
+
+variables:
+  DEB_BUILD_OPTIONS: terse nodoc nocheck nopgo
+
+
+include:
+- local: .gitlab/ci/source.yml
+- project: gardenlinux/gardenlinux-package-build
+  file:
+  - pipeline/variables.yml
+  - pipeline/workflow.yml
+  - pipeline/build.yml
+  - pipeline/signed-source.yml
+  - pipeline/signed-build.yml
+  - pipeline/deploy.yml
