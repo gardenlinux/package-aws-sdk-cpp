@@ -35,22 +35,23 @@ source:
     fi
 
   script:
-  - cat /proc/meminfo
-  - ROOT=$(pwd)
+  - source_dir=$(pwd)
   - mkdir _output
   - cd _output
-  - REPO="https://github.com/aws/aws-sdk-cpp.git"
-  - VERSION=1.9.303
-  - git clone --depth=1 --recurse-submodules -b "$VERSION" "$REPO"
-  - cd aws-sdk-cpp
-  - curl -sSL https://patch-diff.githubusercontent.com/raw/aws/aws-sdk-cpp/pull/1986.patch | git apply
+  - repo="https://github.com/aws/aws-sdk-cpp.git"
+  - version=1.9.303
+  - patch="https://patch-diff.githubusercontent.com/raw/aws/aws-sdk-cpp/pull/1986.patch"
+  - repo_name="$(basename "$repo" .git)"
+  - git clone --depth=1 --recurse-submodules -b "$version" "$repo"
+  - cd "$repo_name"
+  - curl -sSL "$patch" | git apply
   - git config core.quotepath off
-  - git ls-files --recurse-submodules | tar cJf "../aws-sdk-cpp_$VERSION.orig.tar.xz" --transform 's#^#'"aws-sdk-cpp-$VERSION"'/#S' --verbatim-files-from -T-
+  - git ls-files --recurse-submodules | tar cJf "../${repo_name}_$version.orig.tar.xz" --transform 's#^#'"$repo_name-$version"'/#S' --verbatim-files-from -T-
   - cd ..
-  - rm -rf aws-sdk-cpp
-  - tar xJf "aws-sdk-cpp_$VERSION.orig.tar.xz"
-  - cp -r "$ROOT/debian" "aws-sdk-cpp-$VERSION/"
-  - cd "aws-sdk-cpp-$VERSION/"
+  - rm -rf "$repo_name"
+  - tar xJf "${repo_name}_$version.orig.tar.xz"
+  - cp -r "$source_dir/debian" "$repo_name-$version/"
+  - cd "$repo_name-$version/"
   - dpkg-buildpackage -us -uc -S -nc -d
 
   artifacts:

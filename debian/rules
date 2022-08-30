@@ -22,5 +22,4 @@
 # This is example for Cmake (See https://bugs.debian.org/641051 )
 override_dh_auto_configure:
 	dh_auto_configure -- \
-	-DCMAKE_CXX_FLAGS="-DOPENSSL_API_COMPAT=0x10100000L" \
-	-DBUILD_ONLY="ec2;iam;kms;s3"
+	-DCMAKE_CXX_FLAGS="-DOPENSSL_API_COMPAT=0x10100000L"
