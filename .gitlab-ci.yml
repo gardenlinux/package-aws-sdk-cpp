@@ -1,22 +1,9 @@
-stages:
-- source
-- build
-- signed source
-- signed build
-- test
-- deploy
-
-variables:
-  DEB_BUILD_OPTIONS: terse nodoc nocheck nopgo
-
-
 include:
-- local: .gitlab/ci/source.yml
 - project: gardenlinux/gardenlinux-package-build
   file:
-  - pipeline/variables.yml
-  - pipeline/workflow.yml
-  - pipeline/build.yml
-  - pipeline/signed-source.yml
-  - pipeline/signed-build.yml
-  - pipeline/deploy.yml
+  - pipeline/pipeline.yml
+
+variables:
+  # Define the source of this package
+  SOURCE_NAME: 'aws-sdk-cpp'
+  ORIG_TAR: 'aws-sdk-cpp_1.9.365-1.orig.tar.gz'
