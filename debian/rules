@@ -15,6 +15,7 @@
 
 
 %:
+	./prefetch_crt_dependency.sh
 	dh $@
 
 
