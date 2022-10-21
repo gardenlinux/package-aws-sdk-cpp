@@ -6,4 +6,4 @@ include:
 variables:
   # Define the source of this package
   SOURCE_NAME: 'aws-sdk-cpp'
-  ORIG_TAR: 'aws-sdk-cpp_1.9.365-1.orig.tar.gz'
+  ORIG_TAR: 'aws-sdk-cpp_1.9.365.orig.tar.gz'
