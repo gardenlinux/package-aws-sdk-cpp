@@ -1,9 +1,7 @@
 include:
-- project: gardenlinux/gardenlinux-package-build
-  file:
-  - pipeline/pipeline.yml
+  project: gardenlinux/gardenlinux-package-build
+  file: pipeline/pipeline-git.yml
 
 variables:
-  # Define the source of this package
-  SOURCE_NAME: 'aws-sdk-cpp'
-  ORIG_TAR: 'aws-sdk-cpp_1.9.365.orig.tar.gz'
+  SOURCE_NAME: aws-sdk-cpp
+  SOURCE_REPO: https://github.com/aws/aws-sdk-cpp.git
