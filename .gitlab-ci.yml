@@ -5,3 +5,4 @@ include:
 variables:
   SOURCE_NAME: aws-sdk-cpp
   SOURCE_REPO: https://github.com/aws/aws-sdk-cpp.git
+  SOURCE_TAG_PREFIX: ''
