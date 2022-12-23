@@ -2,13 +2,6 @@ include:
   project: gardenlinux/gardenlinux-package-build
   file: pipeline/pipeline-git.yml
 
-stages:
-- source
-- build
-- signed source
-- signed build
-- deploy
-
 variables:
   SOURCE_NAME: aws-sdk-cpp
   SOURCE_REPO: https://github.com/aws/aws-sdk-cpp.git
