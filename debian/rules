@@ -7,7 +7,9 @@ source:
 	dh $@
 
 override_dh_auto_configure:
+	cat /proc/meminfo
+	uname -a
 	dh_auto_configure -- \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
-		-DBUILD_SHARED_LIBS=OFF \
+		-DCMAKE_CXX_FLAGS="-DOPENSSL_API_COMPAT=0x10100000L" \
 		-DBUILD_ONLY="kms"
