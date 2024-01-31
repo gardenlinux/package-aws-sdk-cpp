@@ -2,3 +2,4 @@ pkg=aws-sdk-cpp
 version=1.11.253
 git_src --branch "$version" https://github.com/aws/aws-sdk-cpp.git
 import_src src
+version_suffix=gardenlinux0
